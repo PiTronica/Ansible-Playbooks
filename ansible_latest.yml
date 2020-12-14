@@ -1,0 +1,35 @@
+---
+
+- name: Install latest Ansible version using Ansible
+  hosts: '{{ target }}'
+  become: yes
+  
+  tasks:
+    - name: Install sshpass
+      apt:
+        name: 
+          - sshpass
+          - dirmngr
+        state: latest
+    
+    - name: add source to source lists
+      apt_repository:
+        repo: deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main
+        state: present
+
+    - name: Add key to apt_repo
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: 93C4A3FD7BB9C367
+        validate_certs: no
+
+    - name: update sources
+      apt:
+        update_cache: yes
+        cache_valid_time: 1
+
+    - name: install latest ansible
+      apt: 
+        name: ansible
+        state: latest
+        
