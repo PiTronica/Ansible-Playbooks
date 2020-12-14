@@ -9,6 +9,6 @@ When ansible is already installed use this yml file to upgrade to the latest ava
 
 running the playbook:
 
-`wget https://raw.githubusercontent.com/PiTronica/Ansible-Playbooks/main/ansible_latest.yml
+`wget https://raw.githubusercontent.com/PiTronica/Ansible-Playbooks/main/ansible_latest.yml`
 
-ansible-playbook ansible_latest.yml --extra-vars 'target=localhost'`
+`ansible-playbook ansible_latest.yml --extra-vars 'target=localhost'`
