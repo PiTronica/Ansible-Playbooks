@@ -1,0 +1,33 @@
+---
+
+- name: Install cloning software
+  become: yes
+  hosts: '{{ target }}'
+
+  tasks:
+    - name: update & upgrade
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        upgrade: yes
+
+    - name: Create a directory if it does not exist
+      file:
+        path: /var/clonefs
+        state: directory
+        mode: '0755'
+
+    - name: clone git repo
+      git:
+        repo: 'https://github.com/billw2/rpi-clone.git'
+        dest: /var/clonefs
+
+    - name: Copy file with owner and permissions
+      copy:
+        src: /var/clonefs/{{ item }}
+        dest: /usr/local/sbin/
+        remote_src: yes
+      with_items:
+        - rpi-clone
+        - rpi-clone-setup
+#      remote_src: yes

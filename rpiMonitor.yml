@@ -1,0 +1,46 @@
+---
+
+- name: Installing Rpi Monitor
+  hosts: '{{ target }}'
+  become: yes
+  
+  tasks:
+    - name: update & upgrade
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        upgrade: yes
+
+    - name: install dependancies
+      apt:
+        name: dirmngr
+        state: latest
+
+    - name: add keyserver 
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: 2C0D3C0F
+        validate_certs: no
+
+    - name: get repository list.
+      get_url:
+         url: http://goo.gl/vewCLL
+         dest: /etc/apt/sources.list.d/rpimonitor.list
+        # mode: '0770'
+
+  
+    - name: update with new repository installed
+      apt:
+        update_cache: yes
+        cache_valid_time: 0
+
+    - name: Install Rpi Monitor 
+      apt: 
+        name: rpimonitor
+        state: latest
+
+
+    - name: run extra commands (auto update)
+      command: /etc/init.d/rpimonitor update
+
+    - command: /etc/init.d/rpimonitor install_auto_package_status_update
